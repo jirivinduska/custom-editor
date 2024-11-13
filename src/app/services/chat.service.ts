@@ -3,11 +3,11 @@ import { AzureOpenAI } from 'openai';
 import { map, Observable, reduce } from 'rxjs';
 
 const endpoint = 'https://genai-openai-composerbrain.openai.azure.com/';
-const apiKey = 'af564e78bed7452895952a3384d70690';
+const apiKey = '';
 const apiVersion = '2024-05-01-preview';
 const deployment = 'gpt-4o';
 const searchEndpoint = 'https://composer.search.windows.net/';
-const searchKey = 'i26ISUmFHvmXIpnaZv93B774bH8h7Oi8xD6iqklMulAzSeB0ZTBt';
+const searchKey = '';
 const searchIndex = 'composer-2';
 
 @Injectable({

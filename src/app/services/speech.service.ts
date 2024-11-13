@@ -5,7 +5,7 @@ import * as SpeechSDK from 'microsoft-cognitiveservices-speech-sdk';
   providedIn: 'root'
 })
 export class SpeechService {
-  private subscriptionKey = '6vTozYzko9KBqrekLnOWvUL1T5WnmP8ojk5LXD3AHwsX0M240mw9JQQJ99AKACmepeSXJ3w3AAAYACOG9Xys';
+  private subscriptionKey = '';
   private serviceRegion = 'uksouth';
 
   constructor() { }
