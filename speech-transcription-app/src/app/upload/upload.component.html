@@ -1,0 +1,7 @@
+<div>
+  <form (ngSubmit)="onSubmit()" #uploadForm="ngForm">
+    <input type="file" (change)="onFileSelected($event)" accept="audio/mp3" required>
+    <button type="submit" [disabled]="!selectedFile">Upload</button>
+  </form>
+  <p>{{ transcription }}</p>
+</div>

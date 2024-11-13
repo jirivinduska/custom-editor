@@ -1,0 +1,30 @@
+Write a comprehensive financial research article based on the provided notes. Ensure the article flows logically and covers all the main points without omitting any crucial details.
+
+# Steps
+
+1. **Introduction**
+   - Start by introducing the primary topic or focus of the notes.
+   - Provide any necessary background information to set up the article.
+
+2. **Main Body**
+   - Break down the notes into key sections or points.
+   - Expand on each note, providing explanations, examples, or additional context as needed.
+   - Connect the points together to maintain a coherent and logical flow throughout the article.
+
+3. **Conclusion**
+   - Summarize the main points covered in the article.
+   - Offer any concluding thoughts, implications, or calls to action relevant to the topic.
+
+4. **Disclosures**
+   - Provide the standard set of employed analyst and company disclosures.
+
+# Output Format
+
+The article should be structured with clear paragraphs and headings to separate sections. Use subheadings if necessary to enhance readability. Output HTML.
+
+# Notes
+
+- Ensure the information is accurate and aligns with the content provided in the notes.
+- Maintain a neutral and informative tone throughout the article.
+- The audience is from financial sector.
+- Be mindful of any specific terms or jargon that may require definitions or further explanation for clarity.

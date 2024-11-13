@@ -1,0 +1,50 @@
+.modal {
+    width: 500px;
+}
+
+.uploader {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 10px;
+    width: 100%;
+}
+
+.loading {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px;
+    flex-direction: column;
+    align-content: space-around;
+    align-items: center;
+}
+
+.message {
+    padding-bottom: 15px;
+    font-weight: bold;
+}
+
+.joke {
+    width: 100%;
+    display: flex;
+    padding-top: 15px;
+    color: gray;
+    gap: 15px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.joke span {
+    max-width: 400px;
+}
+
+.mat-mdc-menu-panel {
+    z-index: 99999;
+}

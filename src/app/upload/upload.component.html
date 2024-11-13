@@ -1,0 +1,27 @@
+<div class="modal ck-reset_all-excluded">
+  <div class="uploader">
+    <p *ngIf="!isLoading && !isDone">Upload your audito remarks to generate the report.</p>
+    <form #uploadForm="ngForm" *ngIf="!isLoading && !isDone">
+      <input #auidoInput hidden="true" id="input-file-id" type="file" (change)="onFileSelected($event)" accept="audio/wav" required/>
+      <button mat-stroked-button (click)="auidoInput.click()">{{ fileLabel }}</button>
+      <input #pdfInput hidden="true" id="input-file-id-2" type="file" (change)="onPdfFileSelected($event)" accept=".pdf" required/>
+      <button mat-stroked-button (click)="pdfInput.click()">{{ fileLabelPdf }}</button>
+      <button mat-flat-button (click)="onSubmit()" color="primary" [disabled]="!selectedFile || !selectedPdfFile">
+        Generate...
+      </button>
+    </form>
+    <div class="loading" *ngIf="isLoading && !isDone">
+      <div class="message"> {{ loadingLabel }}</div>
+      <mat-spinner></mat-spinner>
+      <div class="joke">
+        <mat-icon aria-hidden="false"  fontIcon="mood"></mat-icon>
+        <span>
+          {{ joke }}
+        </span>
+      </div>
+    </div>
+    <div class="done" *ngIf="isDone && !isLoading">
+        Report generated. Click ok to paste it to editor.
+    </div>
+  </div>
+</div>
