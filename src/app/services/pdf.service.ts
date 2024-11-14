@@ -53,6 +53,25 @@ export class PdfService {
         tableContent += '<table border="1">\n';
         let currentRow = -1;
         for (const cell of table.cells) {
+          if (cell.rowIndex < 1) {
+            continue; // Ignore the first row
+          }
+          if (cell.rowIndex === 1) {
+            if (cell.rowIndex !== currentRow) {
+              if (currentRow !== -1) {
+                tableContent += '</tr>\n';
+              }
+              tableContent += '<tr>\n';
+              currentRow = cell.rowIndex;
+            }
+            if (cell.columnIndex === 1) {
+              tableContent += `<th></th>\n`
+              tableContent += `<th>${cell.content}</th>\n`;
+            } else {
+              tableContent += `<th>${cell.content}</th>\n`;
+            }
+            continue;
+          }
           if (cell.rowIndex !== currentRow) {
             if (currentRow !== -1) {
               tableContent += '</tr>\n';
