@@ -72,41 +72,24 @@ export class UploadComponent {
     if (this.selectedFile || this.selectedPdfFile) {
       this.isLoading = true;
       this.isDone = false;
-      this.loadingLabel = 'Converting speech to text...';
-      this.speechService.transcribeAudio(this.selectedFile).then(
-        (audioText) => {
-          this.loadingLabel = 'Extracting text from PDF...';
-          this.pdfService.transcribePdf(this.selectedPdfFile).then(
-            (pdfText) => {
-              this.loadingLabel = 'Extracting data from PDF...';
-              this.pdfService.extractTables(this.selectedPdfFile).then(
-                (table) => {
-                  this.loadingLabel = 'Writing report...';
-                  this.chatService.generate(pdfText, audioText).then(
-                    (html) => {
-                      this.loadingLabel = "Adding finacial data...";
-                      this.financialDateService.addTable(html, table).then(
-                        (success) => {
-                          this.transcription = success;
-                          this.isLoading = false;
-                          this.isDone = true;
-                          this.loadingLabel = '';
-                        },
-                        (error) => {
-                          this.transcription = error;
-                          this.isLoading = false;
-                          this.isDone = true;
-                          this.loadingLabel = '';
-                        }
-                      );
-                    },
-                    (error) => {
-                      this.transcription = error;
-                      this.isLoading = false;
-                      this.isDone = true;
-                      this.loadingLabel = '';
-                    }
-                  );
+      this.loadingLabel = 'Preparing data...';
+      Promise.all([
+        this.speechService.transcribeAudio(this.selectedFile),
+        this.pdfService.transcribePdf(this.selectedPdfFile),
+        this.pdfService.extractTables(this.selectedPdfFile)
+      ])
+      .then(
+        ([audioText, pdfText, table]) => {
+          this.loadingLabel = 'Writing report...';
+          this.chatService.generate(pdfText, audioText).then(
+            (html) => {
+              this.loadingLabel = "Adding finacial data...";
+              this.financialDateService.addTable(html, table).then(
+                (success) => {
+                  this.transcription = success;
+                  this.isLoading = false;
+                  this.isDone = true;
+                  this.loadingLabel = '';
                 },
                 (error) => {
                   this.transcription = error;
@@ -114,7 +97,7 @@ export class UploadComponent {
                   this.isDone = true;
                   this.loadingLabel = '';
                 }
-              )
+              );
             },
             (error) => {
               this.transcription = error;
