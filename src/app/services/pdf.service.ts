@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentAnalysisClient , AzureKeyCredential } from '@azure/ai-form-recognizer';
+import { DocumentAnalysisClient, AzureKeyCredential } from '@azure/ai-form-recognizer';
 
 @Injectable({
   providedIn: 'root'
@@ -8,15 +8,18 @@ export class PdfService {
   private subscriptionKey = '';
   private serviceRegion = 'uksouth';
 
-  private client: DocumentAnalysisClient ;
+  private client: DocumentAnalysisClient;
 
   constructor() {
     const endpoint = 'https://composer-pdf-api.cognitiveservices.azure.com/';
-    const apiKey = '7ZKAQlMZfwbJGdDtsBd6R3zodvlHWqJjb6oY8NhF63rWH8segLA1JQQJ99AKACmepeSXJ3w3AAALACOGY2fo';
+    const apiKey = '';
     this.client = new DocumentAnalysisClient(endpoint, new AzureKeyCredential(apiKey));
-   }
+  }
 
-   public async transcribePdf(file: File): Promise<string> {
+  public async transcribePdf(file: File): Promise<string> {
+    if (!file) {
+      return '';
+    }
     const poller = await this.client.beginAnalyzeDocument('prebuilt-read', file);
     const result = await poller.pollUntilDone();
 
@@ -30,4 +33,41 @@ export class PdfService {
     }
     return content;
   }
+
+  public async extractTables(file: File): Promise<string> {
+    if (!file) {
+      return '';
+    }
+    const poller = await this.client.beginAnalyzeDocument('prebuilt-layout', file);
+    const result = await poller.pollUntilDone();
+
+    if (!result || !result.tables || result.tables.length === 0) {
+      return '';
+    }
+
+    let searchValue = 'NET INCOME';
+    let tableContent = '';
+    for (const table of result.tables) {
+      const tableHeader = table.cells.find(cell => cell.rowIndex === 2 && cell.content === searchValue);
+      if (tableHeader) {
+        tableContent += '<table border="1">\n';
+        let currentRow = -1;
+        for (const cell of table.cells) {
+          if (cell.rowIndex !== currentRow) {
+            if (currentRow !== -1) {
+              tableContent += '</tr>\n';
+            }
+            tableContent += '<tr>\n';
+            currentRow = cell.rowIndex;
+          }
+          tableContent += `<td>${cell.content}</td>\n`;
+        }
+        tableContent += '</tr>\n</table>\n';
+        break;  // Exit loop after finding the specified table
+      }
+    }
+    console.log(tableContent);
+    return tableContent;
+  }
+
 }

@@ -10,6 +10,7 @@ import { PdfService } from '../services/pdf.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { interval, map, Subscription } from 'rxjs';
+import { FinacialDataService } from '../services/financial-data.service';
 
 
 
@@ -38,7 +39,8 @@ export class UploadComponent {
     private speechService: SpeechService,
     private chatService: ChatService,
     private jokesService: JokesService,
-    private pdfService: PdfService
+    private pdfService: PdfService,
+    private financialDateService: FinacialDataService
   ) {
     this.joke = jokesService.getJoke();
     this.subscription = interval(10000) // Repeat every 5 seconds
@@ -67,7 +69,7 @@ export class UploadComponent {
   }
 
   onSubmit(): void {
-    if (this.selectedFile) {
+    if (this.selectedFile || this.selectedPdfFile) {
       this.isLoading = true;
       this.isDone = false;
       this.loadingLabel = 'Converting speech to text...';
@@ -76,13 +78,35 @@ export class UploadComponent {
           this.loadingLabel = 'Extracting text from PDF...';
           this.pdfService.transcribePdf(this.selectedPdfFile).then(
             (pdfText) => {
-              this.loadingLabel = 'Writing report...';
-              this.chatService.generate(pdfText, audioText).then(
-                (html) => {
-                  this.transcription = html;
-                  this.isLoading = false;
-                  this.isDone = true;
-                  this.loadingLabel = '';
+              this.loadingLabel = 'Extracting data from PDF...';
+              this.pdfService.extractTables(this.selectedPdfFile).then(
+                (table) => {
+                  this.loadingLabel = 'Writing report...';
+                  this.chatService.generate(pdfText, audioText).then(
+                    (html) => {
+                      this.loadingLabel = "Adding finacial data...";
+                      this.financialDateService.addTable(html, table).then(
+                        (success) => {
+                          this.transcription = success;
+                          this.isLoading = false;
+                          this.isDone = true;
+                          this.loadingLabel = '';
+                        },
+                        (error) => {
+                          this.transcription = error;
+                          this.isLoading = false;
+                          this.isDone = true;
+                          this.loadingLabel = '';
+                        }
+                      );
+                    },
+                    (error) => {
+                      this.transcription = error;
+                      this.isLoading = false;
+                      this.isDone = true;
+                      this.loadingLabel = '';
+                    }
+                  );
                 },
                 (error) => {
                   this.transcription = error;
@@ -90,7 +114,7 @@ export class UploadComponent {
                   this.isDone = true;
                   this.loadingLabel = '';
                 }
-              );
+              )
             },
             (error) => {
               this.transcription = error;

@@ -17,11 +17,14 @@ export class ChatService {
   private readonly prompt = `I will generate comprehensive Earnings Call financial report for you using Earning Results and your Talking Points. Please provide them. Generated report will have the following properties:
 
   # Output Format
-The article should be structured with clear paragraphs and headings to separate sections. Use subheadings if necessary to enhance readability. Output HTML.
+The article should be structured with clear paragraphs and headings to separate sections. Use subheadings if necessary to enhance readability. Output HTML, but only a <body> element without any styling.
 
 # Notes
 - I will assume the report is a written publication not a speech, and hence won't use expressions like "good morning everyone".
-- I will include table with data
+- I will exclude numbers or tables.
+- I will make sure that the ouput is properly formated HTML, not makrdown.
+- If I receive Talking Points, I will highlit those in the generated report and make those a focus.
+- I will generate a section for a Financial data information. It will have a heading and [INPUT DATA HERE] placeholder below it.
 - After the first h1 heading, I will insert plain html <img> tag with "/audio.png" as source for the image.`;
   private client: AzureOpenAI;
 
@@ -36,7 +39,7 @@ The article should be structured with clear paragraphs and headings to separate 
         { role: "user", content: `Talking Points=${audioText}; Earning Results=${earningResults};` },
       ],
       model: 'gpt-4o',
-      max_tokens: 2000,
+      max_tokens: 4096,
       temperature: 0.7,
       top_p: 0.95,
       frequency_penalty: 0,

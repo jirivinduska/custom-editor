@@ -1,7 +1,7 @@
 import { Component, HostListener, ComponentFactoryResolver, ApplicationRef, Injector, NgZone, ComponentRef, ViewChild, ElementRef, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { DecoupledEditor, Bold, Essentials, Italic, Highlight, Paragraph, Undo, EditorConfig, Heading, Underline, Strikethrough, Subscript, Superscript, List, Indent, FindAndReplace, Table, Autoformat, TextTransformation, Clipboard, HorizontalLine, Font, FontFamily, Title, Image, ImageInsert, WordCount, Link } from 'ckeditor5';
+import { DecoupledEditor, Bold, Essentials, Italic, Highlight, Paragraph, Undo, EditorConfig, Heading, Underline, Strikethrough, Subscript, Superscript, List, Indent, FindAndReplace, Table, Autoformat, TextTransformation, Clipboard, HorizontalLine, Font, FontFamily, Title, Image, ImageInsert, WordCount, Link, TableCaption, TableToolbar } from 'ckeditor5';
 import { FileReaderService } from './services/file-reader.service';
 import { AngularDialogModal } from './plugins/angular-dialog/angular-dialog';
 import { PortalModule, DomPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
@@ -31,13 +31,18 @@ export class AppComponent {
   public words = signal(0);
   public characters = signal(0);
   public config: CustomEditorConfig = {
-    plugins: [Autoformat, Bold, TextTransformation, Essentials, Italic, Paragraph, Undo, Heading, Underline, Strikethrough, Subscript, Superscript, Highlight, List, Indent, FindAndReplace, Table, Clipboard, HorizontalLine, Font, FontFamily, Title, AngularDialogModal, Image, ImageInsert, WordCount, Link],
+    plugins: [Autoformat, Bold, TextTransformation, Essentials, Italic, Paragraph, Undo, Heading, Underline, Strikethrough, Subscript, Superscript, Highlight, List, Indent, FindAndReplace, Table, Clipboard, HorizontalLine, Font, FontFamily, Title, AngularDialogModal, Image, ImageInsert, WordCount, Link, TableCaption, TableToolbar],
     toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|', 'heading', 'fontFamily', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'highlight', '|', 'numberedList', 'bulletedList', '|',
       'indent', 'outdent', '|', 'findAndReplace', '|', 'insertTable', 'imageInsert', 'link', 'horizontalLine', 'showModal'],
     placeholder: 'Type the content here!',
     title: {
       placeholder: 'Article title',
-    }
+    },
+    table: {
+      contentToolbar: [
+          'toggleTableCaption'
+      ]
+  }
     ,
     render: (element: HTMLElement) => this.ngZone.run(() => this.renderComponent(element))
   };

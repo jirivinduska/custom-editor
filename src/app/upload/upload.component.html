@@ -6,7 +6,7 @@
       <button mat-stroked-button (click)="auidoInput.click()">{{ fileLabel }}</button>
       <input #pdfInput hidden="true" id="input-file-id-2" type="file" (change)="onPdfFileSelected($event)" accept=".pdf" required/>
       <button mat-stroked-button (click)="pdfInput.click()">{{ fileLabelPdf }}</button>
-      <button mat-flat-button (click)="onSubmit()" color="primary" [disabled]="!selectedFile || !selectedPdfFile">
+      <button mat-flat-button (click)="onSubmit()" color="primary" [disabled]="!selectedFile && !selectedPdfFile">
         Generate...
       </button>
     </form>

@@ -12,6 +12,9 @@ export class SpeechService {
 
   transcribeAudio(audioFile: File): Promise<string> {
     return new Promise((resolve, reject) => {
+      if (!audioFile) {
+        resolve('');
+      }
       const speechConfig = SpeechSDK.SpeechConfig.fromSubscription(this.subscriptionKey, this.serviceRegion);
       const audioConfig = SpeechSDK.AudioConfig.fromWavFileInput(audioFile);
       const recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
